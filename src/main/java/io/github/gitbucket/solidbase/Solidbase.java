@@ -47,7 +47,9 @@ public class Solidbase {
     }
 
     protected void updateVersion(Connection conn, String moduleId, String version) throws SQLException {
-        MigrationUtils.update(conn, "UPDATE VERSIONS SET VERSION = ? WHERE MODULE_ID = ?", version, moduleId);
+        if(MigrationUtils.update(conn, "UPDATE VERSIONS SET VERSION = ? WHERE MODULE_ID = ?", version, moduleId) == 0){
+            MigrationUtils.update(conn, "INSERT INTO VERSIONS (MODULE_ID, VERSION) VALUES (?, ?)", moduleId, version);
+        }
     }
 
     protected void createTableIfNotExist(Connection conn) throws SQLException {

@@ -19,6 +19,13 @@ public class Version {
         this.migrations.addAll(migrations);
     }
 
+    public Version(String version, Migration... migrations){
+        this.version = version;
+        for(Migration migration: migrations){
+            this.migrations.add(migration);
+        }
+    }
+
     public String getVersion(){
         return this.version;
     }

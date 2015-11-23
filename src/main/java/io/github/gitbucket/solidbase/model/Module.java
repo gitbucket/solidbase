@@ -17,6 +17,13 @@ public class Module {
         this.versions.addAll(versions);
     }
 
+    public Module(String moduleId, Version... versions){
+        this.moduleId = moduleId;
+        for(Version version: versions){
+            this.versions.add(version);
+        }
+    }
+
     public String getModuleId(){
         return this.moduleId;
     }
