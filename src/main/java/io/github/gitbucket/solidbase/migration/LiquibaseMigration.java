@@ -23,6 +23,24 @@ import liquibase.statement.SqlStatement;
  */
 public class LiquibaseMigration implements Migration {
 
+    private String path;
+
+    /**
+     * Creates <code>LiquibaseMigration</code> that migrates using <code>/$MODULE_ID_$VERSION.xml</code> on the classpath.
+     */
+    public LiquibaseMigration(){
+        this(null);
+    }
+
+    /**
+     * Creates <code>LiquibaseMigration</code> that migrates using specified XML file.
+     *
+     * @param path the resource path on the classpath.
+     */
+    public LiquibaseMigration(String path){
+        this.path = path;
+    }
+
     @Override
     public void migrate(String moduleId, String version, Map<String, Object> context) throws Exception {
         Connection conn = (Connection) context.get(Solidbase.CONNECTION);
@@ -35,7 +53,11 @@ public class LiquibaseMigration implements Migration {
     protected void migrate(Connection conn, Database database, ClassLoader classLoader,
                            String moduleId, String version, Map<String, Object> context) throws Exception {
 
-        String path = moduleId + "_" + version + ".xml";
+        String path = this.path;
+        if(path == null){
+            path = moduleId + "_" + version + ".xml";
+        }
+
         String xml = MigrationUtils.readResourceAsString(classLoader, path);
 
         Liquibase liquibase = new Liquibase("solidbase.xml", new StringResourceAccessor(

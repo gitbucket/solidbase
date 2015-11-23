@@ -18,18 +18,17 @@ public class Solidbase {
     public static String DATABASE = "solidbase.context.database";
 
     public void migrate(Connection conn, ClassLoader classLoader, Database database, Module module) throws Exception {
-        this.migrate(new JDBCVersionManager(conn), conn, classLoader, database, module);
-    }
-
-    public void migrate(VersionManager versionManager, Connection conn, ClassLoader classLoader, Database database, Module module) throws Exception {
-        versionManager.initialize();
-        String currentVersion = versionManager.getCurrentVersion(module.getModuleId());
-
-        // TODO Should context is given from out of solidbase?
         Map<String, Object> context = new HashMap<>();
         context.put(CONNECTION, conn);
         context.put(CLASSLOADER, classLoader);
         context.put(DATABASE, database);
+
+        this.migrate(new JDBCVersionManager(conn), context, module);
+    }
+
+    public void migrate(VersionManager versionManager, Map<String, Object> context, Module module) throws Exception {
+        versionManager.initialize();
+        String currentVersion = versionManager.getCurrentVersion(module.getModuleId());
 
         boolean skip = true;
 
