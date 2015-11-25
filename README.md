@@ -32,7 +32,7 @@ Add following dependency into your `pom.xml`:
 
 ### Define migration
 
-Create Liquibase migration xml files as `$MODULE_ID_$VERSION.xml` under `src/main/resources`. For example:
+Create Liquibase migration xml files under `src/main/resources`. For example:
 
 - `src/main/resources/test_1.0.0.xml`
 
