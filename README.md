@@ -55,11 +55,28 @@ Define migration that migrates RDBMS using these XML files:
 
 ```java
 Module module = new Module(
+  // module id
   "test",
+  // versions (oldest first)
   new Version("1.0.0", new LiquibaseMigration("test_1.0.0.xml")),
   new Version("1.0.1", new LiquibaseMigration("test_1.0.1.xml")),
   ...
 );
+```
+
+You can add migration for resources other than RDBMS by implementing `Migration` interface. Added migrations are executed in order.
+
+```java
+new Version("1.0.0",
+  // At first, migrate RDBMS
+  new LiquibaseMigration("test_1.0.0.xml"),
+  // Second, migrate other resources
+  new Migration(){
+    @Override
+    public void migrate(String moduleId, String version, Map<String, Object> context) throws Exception {
+      ...
+    }
+  });
 ```
 
 ### Run
@@ -76,3 +93,16 @@ solidbase.migrate(
   module
 );
 ```
+
+Deferences between the current version and the latest version are applied.
+
+### Background
+
+Solidbase creates a following `VERSIONS` table to manage versions automatically:
+
+Column name    | Data type    | Not Null
+:--------------|:-------------|:---------
+MODULE_ID (PK) | VARCHAR(100) | Yes
+VERSION        | VARCHAR(100) | Yes
+
+Solidbase uses this table to know the current version. When migration of the new version is successful, it updates the version with the new version.
