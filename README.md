@@ -57,7 +57,8 @@ Define migration that migrates RDBMS using these XML files:
 Module module = new Module(
   "test",
   new Version("1.0.0", new LiquibaseMigration()),
-  new Version("1.0.1", new LiquibaseMigration())
+  new Version("1.0.1", new LiquibaseMigration()),
+  ...
 );
 ```
 
