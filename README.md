@@ -34,10 +34,10 @@ Add following dependency into your `pom.xml`:
 
 Create Liquibase migration xml files as `$MODULE_ID_$VERSION.xml` under `src/main/resources`. For example:
 
-- `src/main/resources/test_.1.0.0.xml`
+- `src/main/resources/test_1.0.0.xml`
 
   ```xml
-  <changeSet id="1.0" author="Naoki Takezoe">
+  <changeSet id="1.0.0" author="Naoki Takezoe">
     <createTable tableName="person">
         <column name="id" type="int" autoIncrement="true">
             <constraints primaryKey="true" nullable="false"/>
@@ -56,8 +56,8 @@ Define migration that migrates RDBMS using these XML files:
 ```java
 Module module = new Module(
   "test",
-  new Version("1.0.0", new LiquibaseMigration()),
-  new Version("1.0.1", new LiquibaseMigration()),
+  new Version("1.0.0", new LiquibaseMigration("test_1.0.0.xml")),
+  new Version("1.0.1", new LiquibaseMigration("test_1.0.1.xml")),
   ...
 );
 ```
