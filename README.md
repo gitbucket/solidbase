@@ -15,9 +15,9 @@ Add following dependency into your `pom.xml`:
 ```xml
 <repositories>
   <repository>
-    <id>amateras</id>
+    <id>amateras-snapshot</id>
     <name>Project Amateras Maven2 Repository</name>
-    <url>http://amateras.sourceforge.jp/mvn/</url>
+    <url>http://amateras.sourceforge.jp/mvn-snapshot/</url>
   </repository>
 </repositories>
 
