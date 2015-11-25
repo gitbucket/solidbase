@@ -2,6 +2,10 @@
 
 Generic migration tool for RDBMS and other resources based on [Liquibase](http://www.liquibase.org/).
 
+- Multi-database (based on Liquibase)
+- Multi-resource (not only RDBMS)
+- Multi-module (modules can have each versions)
+
 ## Usage
 
 ### Add dependency
