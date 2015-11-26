@@ -76,7 +76,8 @@ new Version("1.0.0",
     public void migrate(String moduleId, String version, Map<String, Object> context) throws Exception {
       ...
     }
-  });
+  }
+);
 ```
 
 ### Run
