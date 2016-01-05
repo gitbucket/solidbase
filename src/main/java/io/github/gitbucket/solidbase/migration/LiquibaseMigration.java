@@ -20,6 +20,7 @@ import liquibase.sqlgenerator.SqlGeneratorFactory;
 import liquibase.statement.SqlStatement;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -79,6 +80,36 @@ public class LiquibaseMigration implements Migration {
             root.setAttribute("author", moduleId);
         }
 
+        // Move constraint attributes defined in columns to child constraints element
+        NodeList columns = root.getElementsByTagName("column");
+        for(int i = 0; i < columns.getLength(); i++){
+            Element column = (Element) columns.item(i);
+            Map<String, String> constraintsMap = new HashMap<>();
+            for(String constraintAttributeName: CONSTRAINT_ATTRIBUTES){
+                if(column.hasAttribute(constraintAttributeName)){
+                    constraintsMap.put(constraintAttributeName, column.getAttribute(constraintAttributeName));
+                    column.removeAttribute(constraintAttributeName);
+                }
+            }
+            if(!constraintsMap.isEmpty()){
+                NodeList nodes = column.getElementsByTagName("constraints");
+                Element constraints = null;
+                if(nodes.getLength() == 0){
+                    constraints = doc.createElement("constraints");
+                    column.appendChild(constraints);
+                } else {
+                    constraints = (Element) nodes.item(0);
+                }
+                for(Map.Entry<String, String> entry: constraintsMap.entrySet()){
+                    String key = entry.getKey();
+                    String value = entry.getValue();
+                    if(!constraints.hasAttribute(key)){
+                        constraints.setAttribute(key, value);
+                    }
+                }
+            }
+        }
+
         Liquibase liquibase = new Liquibase("solidbase.xml", new StringResourceAccessor(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
                 "\n" +
@@ -104,6 +135,10 @@ public class LiquibaseMigration implements Migration {
             }
         }
     }
+
+    private static String[] CONSTRAINT_ATTRIBUTES = {
+        "nullable", "primaryKey", "primaryKeyName", "unique", "uniqueConstraintName", "references", "foreignKeyName", "deleteCascade", "deferrable", "initiallyDeferred"
+    };
 
     private static Document parseXml(String xml) throws Exception {
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
