@@ -1,6 +1,7 @@
 package io.github.gitbucket.solidbase.migration;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
@@ -17,6 +18,16 @@ import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.sql.Sql;
 import liquibase.sqlgenerator.SqlGeneratorFactory;
 import liquibase.statement.SqlStatement;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 
 /**
  * Provides database migration using Liquibase.
@@ -58,7 +69,15 @@ public class LiquibaseMigration implements Migration {
             path = moduleId + "_" + version + ".xml";
         }
 
-        String xml = MigrationUtils.readResourceAsString(classLoader, path);
+        // add required attributes: id and author
+        Document doc = parseXml(MigrationUtils.readResourceAsString(classLoader, path));
+        Element root = doc.getDocumentElement();
+        if(!root.hasAttribute("id")) {
+            root.setAttribute("id", version);
+        }
+        if(!root.hasAttribute("author")) {
+            root.setAttribute("author", moduleId);
+        }
 
         Liquibase liquibase = new Liquibase("solidbase.xml", new StringResourceAccessor(
                 "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +
@@ -70,7 +89,7 @@ public class LiquibaseMigration implements Migration {
                 "    xsi:schemaLocation=\"http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd\n" +
                 "        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd\">\n" +
                 "\n" +
-                xml + "\n" +
+                printXml(doc) + "\n" +
                 "</databaseChangeLog>\n", classLoader), database);
 
         DatabaseChangeLog changeLogs = liquibase.getDatabaseChangeLog();
@@ -86,6 +105,23 @@ public class LiquibaseMigration implements Migration {
         }
     }
 
+    private static Document parseXml(String xml) throws Exception {
+        DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
+        Document doc = builder.parse(new ByteArrayInputStream(xml.getBytes("UTF-8")));
+        return doc;
+    }
+
+    private static String printXml(Document doc) throws Exception {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+        Transformer transformer = TransformerFactory.newInstance().newTransformer();
+        transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+        transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+        transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+        transformer.transform(new DOMSource(doc), new StreamResult(out));
+
+        return new String(out.toByteArray(), "UTF-8");
+    }
 
     private static class StringResourceAccessor extends ClassLoaderResourceAccessor {
 

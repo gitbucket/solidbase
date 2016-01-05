@@ -1,4 +1,4 @@
-<changeSet id="1.0" author="Naoki Takezoe">
+<changeSet>
     <createTable tableName="person">
         <column name="id" type="int" autoIncrement="true">
             <constraints primaryKey="true" nullable="false"/>
