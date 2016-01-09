@@ -39,13 +39,9 @@ Create Liquibase migration xml files under `src/main/resources`. For example:
   ```xml
   <changeSet>
     <createTable tableName="person">
-        <column name="id" type="int" autoIncrement="true">
-            <constraints primaryKey="true" nullable="false"/>
-        </column>
+        <column name="id" type="int" autoIncrement="true" primaryKey="true" nullable="false"/>
         <column name="firstname" type="varchar(50)"/>
-        <column name="lastname" type="varchar(50)">
-            <constraints nullable="false"/>
-        </column>
+        <column name="lastname" type="varchar(50)" constraints nullable="false"/>
         <column name="state" type="char(2)"/>
     </createTable>
   </changeSet>
