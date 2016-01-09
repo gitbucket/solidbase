@@ -85,6 +85,9 @@ public class MigrationUtils {
     }
 
     public static String readStreamAsString(InputStream in) throws IOException {
+        if(in == null){
+            return null;
+        }
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             byte[] buf = new byte[1024 * 8];
