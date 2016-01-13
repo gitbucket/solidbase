@@ -1,6 +1,7 @@
 package io.github.gitbucket.solidbase.migration;
 
 import io.github.gitbucket.solidbase.Solidbase;
+import liquibase.database.Database;
 
 import java.sql.Connection;
 import java.util.Map;
@@ -32,11 +33,12 @@ public class SqlMigration implements Migration {
     public void migrate(String moduleId, String version, Map<String, Object> context) throws Exception {
         Connection conn = (Connection) context.get(Solidbase.CONNECTION);
         ClassLoader cl = (ClassLoader) context.get(Solidbase.CLASSLOADER);
+        Database db = (Database) context.get(Solidbase.DATABASE);
 
-        migrate(conn, cl, moduleId, version, context);
+        migrate(conn, db, cl, moduleId, version, context);
     }
 
-    protected void migrate(Connection conn, ClassLoader classLoader,
+    protected void migrate(Connection conn, Database database, ClassLoader classLoader,
                            String moduleId, String version, Map<String, Object> context) throws Exception {
 
         String path = this.path;
@@ -45,6 +47,12 @@ public class SqlMigration implements Migration {
         }
 
         String sql = MigrationUtils.readResourceAsString(classLoader, path);
+        if(sql == null){
+            // Retry with database specific file
+            sql = MigrationUtils.readResourceAsString(classLoader,
+                    path.replaceFirst("\\.sql$", "_" + database.getShortName() + ".sql"));
+        }
+
         MigrationUtils.update(conn, sql);
     }
 
