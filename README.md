@@ -50,6 +50,10 @@ Create Liquibase migration xml files under `src/main/resources`. For example:
 Define migration that migrates RDBMS using these XML files:
 
 ```java
+import io.github.gitbucket.solidbase.migration.LiquibaseMigration;
+import io.github.gitbucket.solidbase.model.Module;
+import io.github.gitbucket.solidbase.model.Version;
+
 Module module = new Module(
   // module id
   "test",
@@ -63,6 +67,9 @@ Module module = new Module(
 You can add migration for resources other than RDBMS by implementing `Migration` interface. Added migrations are executed in order.
 
 ```java
+import io.github.gitbucket.solidbase.migration.LiquibaseMigration;
+import io.github.gitbucket.solidbase.migration.Migration;
+
 new Version("1.0.0",
   // At first, migrate RDBMS
   new LiquibaseMigration("test_1.0.0.xml"),
@@ -81,6 +88,10 @@ new Version("1.0.0",
 Then, run migration as below:
 
 ```java
+import io.github.gitbucket.solidbase.SolidBase;
+import java.sql.DriverManager;
+import liquibase.database.core.H2Database;
+
 Solidbase solidbase = new Solidbase();
 
 solidbase.migrate(
