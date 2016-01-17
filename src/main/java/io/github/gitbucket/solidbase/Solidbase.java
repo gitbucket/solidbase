@@ -6,6 +6,7 @@ import io.github.gitbucket.solidbase.migration.Migration;
 import io.github.gitbucket.solidbase.model.Module;
 import io.github.gitbucket.solidbase.model.Version;
 import liquibase.database.Database;
+import liquibase.database.jvm.JdbcConnection;
 
 import java.sql.Connection;
 import java.util.HashMap;
@@ -18,6 +19,8 @@ public class Solidbase {
     public static String DATABASE = "solidbase.context.database";
 
     public void migrate(Connection conn, ClassLoader classLoader, Database database, Module module) throws Exception {
+        database.setConnection(new JdbcConnection(conn));
+
         Map<String, Object> context = new HashMap<>();
         context.put(CONNECTION, conn);
         context.put(CLASSLOADER, classLoader);
