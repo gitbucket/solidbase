@@ -1,6 +1,7 @@
 package io.github.gitbucket.solidbase.migration;
 
 import io.github.gitbucket.solidbase.Solidbase;
+import static io.github.gitbucket.solidbase.migration.MigrationUtils.*;
 import liquibase.database.Database;
 
 import java.sql.Connection;
@@ -53,7 +54,7 @@ public class SqlMigration implements Migration {
                     path.replaceFirst("\\.sql$", "_" + database.getShortName() + ".sql"));
         }
 
-        MigrationUtils.update(conn, sql);
+        updateDatabase(conn, sql);
     }
 
 }

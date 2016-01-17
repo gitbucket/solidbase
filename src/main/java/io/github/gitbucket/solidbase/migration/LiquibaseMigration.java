@@ -8,6 +8,8 @@ import java.sql.Connection;
 import java.util.*;
 
 import io.github.gitbucket.solidbase.Solidbase;
+import static io.github.gitbucket.solidbase.migration.MigrationUtils.*;
+
 import liquibase.*;
 import liquibase.change.Change;
 import liquibase.changelog.ChangeSet;
@@ -70,7 +72,7 @@ public class LiquibaseMigration implements Migration {
                 SqlStatement[] statements = change.generateStatements(database);
                 Sql[] sqls = SqlGeneratorFactory.getInstance().generateSql(statements, database);
                 for(Sql sql: sqls){
-                    MigrationUtils.update(conn, sql.toSql());
+                    updateDatabase(conn, sql.toSql());
                 }
             }
         }

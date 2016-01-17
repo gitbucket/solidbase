@@ -13,7 +13,7 @@ import java.sql.SQLException;
  */
 public class MigrationUtils {
 
-    public static int update(Connection conn, String sql, Object... params) throws SQLException {
+    public static int updateDatabase(Connection conn, String sql, Object... params) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(sql);
         try {
             setParameters(stmt, params);
@@ -25,7 +25,7 @@ public class MigrationUtils {
         }
     }
 
-    public static Integer selectInt(Connection conn, String sql, Object... params) throws SQLException {
+    public static Integer selectIntFromDatabase(Connection conn, String sql, Object... params) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(sql);
         try {
             setParameters(stmt, params);
@@ -48,7 +48,7 @@ public class MigrationUtils {
         }
     }
 
-    public static String selectString(Connection conn, String sql, Object... params) throws SQLException {
+    public static String selectStringFromDatabase(Connection conn, String sql, Object... params) throws SQLException {
         PreparedStatement stmt = conn.prepareStatement(sql);
         try {
             setParameters(stmt, params);
@@ -105,6 +105,18 @@ public class MigrationUtils {
 
     public static String readResourceAsString(ClassLoader cl, String path) throws IOException {
         return readStreamAsString(cl.getResourceAsStream(path));
+    }
+
+    public static void ignoreException(ThrowableRunnable f){
+        try {
+            f.run();
+        } catch(Exception ex){
+            // Do nothing
+        }
+    }
+
+    public interface ThrowableRunnable {
+        void run() throws Exception;
     }
 
 }

@@ -1,0 +1,5 @@
+<project default="test">
+  <target name="test">
+    <mkdir dir="solidbase-test-dir"/>
+  </target>
+</project>
