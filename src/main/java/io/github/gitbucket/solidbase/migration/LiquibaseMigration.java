@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import io.github.gitbucket.solidbase.Solidbase;
@@ -12,6 +13,7 @@ import static io.github.gitbucket.solidbase.migration.MigrationUtils.*;
 
 import liquibase.*;
 import liquibase.change.Change;
+import liquibase.changelog.ChangeLogParameters;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
@@ -64,6 +66,9 @@ public class LiquibaseMigration implements Migration {
 
         Liquibase liquibase = new Liquibase(path, new StringResourceAccessor(path,
                 new LiquibaseXmlPreProcessor().preProcess(moduleId, version, source), classLoader), database);
+
+        ChangeLogParameters params = liquibase.getChangeLogParameters();
+        params.set("currentDateTime", new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss").format(new Date()));
 
         DatabaseChangeLog changeLogs = liquibase.getDatabaseChangeLog();
         List<ChangeSet> changeSets = changeLogs.getChangeSets();
