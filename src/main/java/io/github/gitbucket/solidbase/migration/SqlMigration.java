@@ -4,6 +4,7 @@ import io.github.gitbucket.solidbase.Solidbase;
 import static io.github.gitbucket.solidbase.migration.MigrationUtils.*;
 import liquibase.database.Database;
 
+import java.io.FileNotFoundException;
 import java.sql.Connection;
 import java.util.Map;
 
@@ -44,14 +45,18 @@ public class SqlMigration implements Migration {
 
         String path = this.path;
         if(path == null){
-            path = moduleId + "_" + version + ".sql";
+            path = moduleId + "_" + version + "_" + database.getShortName() + ".sql";
         }
 
         String sql = MigrationUtils.readResourceAsString(classLoader, path);
         if(sql == null){
-            // Retry with database specific file
-            sql = MigrationUtils.readResourceAsString(classLoader,
-                    path.replaceFirst("\\.sql$", "_" + database.getShortName() + ".sql"));
+            // Retry
+            path = moduleId + "_" + version + ".sql";
+            sql = MigrationUtils.readResourceAsString(classLoader, path);
+        }
+
+        if(sql == null){
+            throw new FileNotFoundException(path);
         }
 
         updateDatabase(conn, sql);
