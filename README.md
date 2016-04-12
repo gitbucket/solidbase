@@ -114,3 +114,32 @@ MODULE_ID (PK) | VARCHAR(100) | Yes
 VERSION        | VARCHAR(100) | Yes
 
 Solidbase uses this table to know the current version. When migration of the new version is successful, it updates the version with the new version.
+
+## Migration
+
+### XML migration
+
+`LiquibaseMigration` migrates the database by Liquibase like XML as above.
+
+XML schema is improved from Liquibase to be possible to declare column information as attributes instead of nested elements. And a default variable `${currentDateTime}` is available in the XML:
+
+```xml
+<insert tableName="person">
+  <column name="firstname" value="root"/>
+  <column name="lastname" value="root"/>
+  <column name="registeredDate" valueDate="${currentDateTime}"/>
+</insert>
+```
+
+### SQL migration
+
+`SqlMigration` migrates the database by native SQL.
+
+In the default, `SqlMigration` try to load a SQL file from classpath as following order:
+
+1. Specified path (if specified)
+2. `${moduleId}_${version}_${database}.sql`
+3. `${moduleId}_${version}.sql`
+
+It's possible to apply different SQL for each databases by creating multiple SQL files for the same version such as `gitbucket_1.0.0_h2.sql` (for H2 database) and `gitbucket_1.0.0_mysql.sql` (for MySQL).
+
