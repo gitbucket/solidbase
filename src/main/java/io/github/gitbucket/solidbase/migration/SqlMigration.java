@@ -6,6 +6,8 @@ import liquibase.database.Database;
 
 import java.io.FileNotFoundException;
 import java.sql.Connection;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -43,20 +45,26 @@ public class SqlMigration implements Migration {
     protected void migrate(Connection conn, Database database, ClassLoader classLoader,
                            String moduleId, String version, Map<String, Object> context) throws Exception {
 
-        String path = this.path;
-        if(path == null){
-            path = moduleId + "_" + version + "_" + database.getShortName() + ".sql";
+        List<String> fileNames = new ArrayList<>();
+        if(this.path != null){
+            if(this.path.endsWith(".sql")){
+                fileNames.add(this.path.replaceFirst("\\.sql$", "_" + database.getShortName() + ".sql"));
+            }
+            fileNames.add(this.path);
+        }
+        fileNames.add(moduleId + "_" + version + "_" + database.getShortName() + ".sql");
+        fileNames.add(moduleId + "_" + version + ".sql");
+
+        String sql = null;
+        for(String fileName: fileNames){
+            sql = MigrationUtils.readResourceAsString(classLoader, fileName);
+            if(sql != null){
+                break;
+            }
         }
 
-        String sql = MigrationUtils.readResourceAsString(classLoader, path);
         if(sql == null){
-            // Retry
-            path = moduleId + "_" + version + ".sql";
-            sql = MigrationUtils.readResourceAsString(classLoader, path);
-        }
-
-        if(sql == null){
-            throw new FileNotFoundException(path);
+            throw new FileNotFoundException(fileNames.get(fileNames.size() - 1));
         }
 
         updateDatabase(conn, sql);
