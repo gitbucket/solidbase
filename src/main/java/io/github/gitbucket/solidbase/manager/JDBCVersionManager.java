@@ -4,6 +4,7 @@ import io.github.gitbucket.solidbase.migration.MigrationUtils;
 import static io.github.gitbucket.solidbase.migration.MigrationUtils.*;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 
 /**
  * Created by takezoe on 15/11/23.
@@ -39,11 +40,20 @@ public class JDBCVersionManager implements VersionManager {
 
     protected boolean checkTableExist(){
         try {
-            selectIntFromDatabase(conn, "SELECT COUNT(*) FROM VERSIONS");
-            return true;
+            ResultSet rs = conn.getMetaData().getTables(null, null, "%", new String[]{ "TABLE" });
+            try {
+                while(rs.next()){
+                    String tableName = rs.getString("TABLE_NAME");
+                    if(tableName.toUpperCase().equals("VERSIONS")){
+                        return true;
+                    }
+                }
+            } finally {
+                rs.close();
+            }
         } catch(Exception ex){
-            return false;
         }
+        return false;
     }
 
 }
