@@ -8,6 +8,37 @@
   <artifactId>solidbase</artifactId>
   <version>1.0.0</version>
 
+  <packaging>jar</packaging>
+  <name>solidbase</name>
+  <url>https://github.com/gitbucket/solidbase</url>
+  <description>Generic migration tool for RDBMS and other resources based on Liquibase</description>
+  <inceptionYear>2016</inceptionYear>
+  <licenses>
+    <license>
+      <name>The Apache Software License, Version 2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    </license>
+  </licenses>
+  <organization>
+    <name>GitBucket</name>
+    <url>https://github.com/gitbucket</url>
+  </organization>
+  <scm>
+    <connection>scm:git:https://github.com/gitbucket/solidbase.git</connection>
+    <developerConnection>scm:git:https://github.com/gitbucket/solidbase.git</developerConnection>
+    <url>https://github.com/gitbucket/solidbase</url>
+  </scm>
+  <issueManagement>
+    <system>GitHub Issues</system>
+    <url>https://github.com/gitbucket/solidbase/issues</url>
+  </issueManagement>
+  <developers>
+    <developer>
+      <id>takezoe</id>
+      <name>Naoki Takezoe</name>
+    </developer>
+  </developers>
+
   <dependencies>
     <dependency>
       <groupId>org.liquibase</groupId>
