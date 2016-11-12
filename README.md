@@ -13,14 +13,6 @@ Generic migration tool for RDBMS and other resources based on [Liquibase](http:/
 Add following dependency into your `pom.xml`:
 
 ```xml
-<repositories>
-  <repository>
-    <id>amateras-snapshot</id>
-    <name>Project Amateras Maven2 Repository</name>
-    <url>http://amateras.sourceforge.jp/mvn/</url>
-  </repository>
-</repositories>
-
 <dependencies>
   <dependency>
     <groupId>io.github.gitbucket</groupId>
