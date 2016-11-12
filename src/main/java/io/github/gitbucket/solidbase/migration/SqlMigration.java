@@ -66,8 +66,31 @@ public class SqlMigration implements Migration {
         if(sql == null){
             throw new FileNotFoundException(fileNames.get(fileNames.size() - 1));
         }
+        for(String singleSql: splitMultiStatementSql(sql)){
+          updateDatabase(conn, singleSql);
+        }
+    }
 
-        updateDatabase(conn, sql);
+    protected List<String> splitMultiStatementSql(String sql){
+        List<String> result = new ArrayList<>();
+        boolean stringLiteral = false;
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < sql.length(); i++){
+            char c = sql.charAt(i);
+            if(c == '\''){
+                stringLiteral = !stringLiteral;
+            }
+            if(c == ';' && !stringLiteral){
+                result.add(sb.toString().trim());
+                sb.setLength(0);
+            } else {
+                sb.append(c);
+            }
+        }
+        if(sb.length() > 0){
+            result.add(sb.toString().trim());
+        }
+        return result;
     }
 
 }

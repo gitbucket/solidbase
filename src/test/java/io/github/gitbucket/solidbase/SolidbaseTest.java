@@ -2,7 +2,6 @@ package io.github.gitbucket.solidbase;
 
 import io.github.gitbucket.solidbase.migration.AntMigration;
 import io.github.gitbucket.solidbase.migration.LiquibaseMigration;
-import io.github.gitbucket.solidbase.migration.MigrationUtils;
 import io.github.gitbucket.solidbase.model.Module;
 import io.github.gitbucket.solidbase.model.Version;
 import liquibase.database.core.H2Database;
