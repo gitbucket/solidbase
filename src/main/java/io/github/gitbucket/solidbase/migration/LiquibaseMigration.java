@@ -57,13 +57,26 @@ public class LiquibaseMigration implements Migration {
     protected void migrate(Connection conn, Database database, ClassLoader classLoader,
                            String moduleId, String version, Map<String, Object> context) throws Exception {
 
-        String path = this.path;
-        if(path == null){
-            path = moduleId + "_" + version + ".xml";
+        List<String> fileNames = new ArrayList<>();
+        if(this.path != null){
+            if(this.path.endsWith(".xml")){
+                fileNames.add(this.path.replaceFirst("\\.xml$", "_" + database.getShortName() + ".xml"));
+            }
+            fileNames.add(this.path);
         }
+        fileNames.add(moduleId + "_" + version + "_" + database.getShortName() + ".xml");
+        fileNames.add(moduleId + "_" + version + ".xml");
 
-        String source = MigrationUtils.readResourceAsString(classLoader, path);
-
+        String path = null;
+        String source = null;
+        for(String fileName: fileNames){
+            source = MigrationUtils.readResourceAsString(classLoader, fileName);
+            if(source != null){
+                path = fileName; 
+                break;
+            }
+        }
+        
         Liquibase liquibase = new Liquibase(path, new StringResourceAccessor(path,
                 new LiquibaseXmlPreProcessor().preProcess(moduleId, version, source), classLoader), database);
 
