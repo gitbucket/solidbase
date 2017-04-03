@@ -127,11 +127,12 @@ XML schema is improved from Liquibase to be possible to declare column informati
 
 `SqlMigration` migrates the database by native SQL.
 
-In the default, `SqlMigration` try to load a SQL file from classpath as following order:
+### Apply RDBMS specific configuration
+In the default, `LiquibaseMigration` and `SqlMigration` try to load a file from classpath as following order:
 
-1. Specified path (if specified)
-2. `${moduleId}_${version}_${database}.sql`
-3. `${moduleId}_${version}.sql`
+1. Specified path with `_${database}` name suffix (if specified)
+2. Specified path (if specified)
+3. `${moduleId}_${version}_${database}.${extension}`
+4. `${moduleId}_${version}.${extension}`
 
-It's possible to apply different SQL for each databases by creating multiple SQL files for the same version such as `gitbucket_1.0.0_h2.sql` (for H2 database) and `gitbucket_1.0.0_mysql.sql` (for MySQL).
-
+It's possible to apply different XML/SQL for each databases by creating multiple files such as `gitbucket_1.0.0_h2.sql` (for H2 database) and `gitbucket_1.0.0_mysql.sql` (for MySQL).
