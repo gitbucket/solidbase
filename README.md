@@ -17,7 +17,7 @@ Add following dependency into your `pom.xml`:
   <dependency>
     <groupId>io.github.gitbucket</groupId>
     <artifactId>solidbase</artifactId>
-    <version>1.0.1</version>
+    <version>1.0.2</version>
   </dependency>
 </dependencies>
 ```
