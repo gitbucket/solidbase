@@ -81,14 +81,18 @@ public class SqlMigration implements Migration {
                 stringLiteral = !stringLiteral;
             }
             if(c == ';' && !stringLiteral){
-                result.add(sb.toString().trim());
+                String stmt = sb.toString().trim();
+                if(stmt.length() > 0){
+                    result.add(stmt);
+                }
                 sb.setLength(0);
             } else {
                 sb.append(c);
             }
         }
-        if(sb.length() > 0){
-            result.add(sb.toString().trim());
+        String stmt = sb.toString().trim();
+        if(stmt.length() > 0){
+            result.add(stmt);
         }
         return result;
     }
