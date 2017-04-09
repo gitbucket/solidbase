@@ -43,24 +43,24 @@
     <dependency>
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
-      <version>3.4.1</version>
+      <version>3.5.3</version>
     </dependency>
     <dependency>
       <groupId>org.apache.ant</groupId>
       <artifactId>ant</artifactId>
-      <version>1.9.6</version>
+      <version>1.10.1</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
-      <version>1.4.190</version>
+      <version>1.4.194</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
-      <version>4.10</version>
+      <version>4.12</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -106,7 +106,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.1</version>
+        <version>3.6.1</version>
         <configuration>
           <source>1.8</source>
           <target>1.8</target>
@@ -114,7 +114,7 @@
       </plugin>
       <plugin>
         <artifactId>maven-source-plugin</artifactId>
-        <version>2.1.2</version>
+        <version>3.0.1</version>
         <executions>
           <execution>
             <id>source-jar</id>
