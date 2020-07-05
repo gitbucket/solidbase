@@ -13,3 +13,11 @@ target/
 hs_err_pid*
 .idea/
 *.iml
+
+# Visual Studio Code
+.vscode
+
+# Eclipse
+.settings
+.classpath
+.project
