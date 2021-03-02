@@ -94,7 +94,7 @@ solidbase.migrate(
 );
 ```
 
-Deferences between the current version and the latest version are applied.
+Defferences between the current version and the latest version are applied.
 
 ### Background
 
