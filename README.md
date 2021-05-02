@@ -4,13 +4,13 @@ Generic migration tool for RDBMS and other resources based on [Liquibase](http:/
 
 - Multi-database (based on Liquibase)
 - Multi-resource (not only RDBMS)
-- Multi-module (modules can have each versions)
+- Multi-module (modules can have their own versions)
 
 ## Usage
 
 ### Add dependency
 
-Add following dependency into your `pom.xml`:
+Add following dependency into your Maven `pom.xml`:
 
 ```xml
 <dependencies>
@@ -21,10 +21,13 @@ Add following dependency into your `pom.xml`:
   </dependency>
 </dependencies>
 ```
-
+or for Gradle add to `build.gradle`:
+```groovy
+implementation 'io.github.gitbucket:solidbase:1.0.3'
+```
 ### Define migration
 
-Create Liquibase migration xml files under `src/main/resources`. For example:
+Create the Liquibase migration xml files under `src/main/resources`. For example:
 
 - `src/main/resources/test_1.0.0.xml`
 
@@ -56,7 +59,8 @@ Module module = new Module(
 );
 ```
 
-You can add migration for resources other than RDBMS by implementing `Migration` interface. Added migrations are executed in order.
+You can also add a migration for resources other than RDBMS by implementing `Migration` interface. 
+Added migrations are executed in order.
 
 ```java
 import io.github.gitbucket.solidbase.migration.LiquibaseMigration;
@@ -94,7 +98,7 @@ solidbase.migrate(
 );
 ```
 
-Defferences between the current version and the latest version are applied.
+Differences between the current version and the latest version are applied.
 
 ### Background
 
