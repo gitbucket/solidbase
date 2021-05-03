@@ -51,8 +51,7 @@ public class JDBCVersionManager implements VersionManager {
             } finally {
                 rs.close();
             }
-        } catch(Exception ex){
-        }
+        } catch(Exception ex){ /* ignore */ }
         return false;
     }
 
