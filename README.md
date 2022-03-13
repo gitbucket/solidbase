@@ -140,3 +140,11 @@ In the default, `LiquibaseMigration` and `SqlMigration` try to load a file from 
 4. `${moduleId}_${version}.${extension}`
 
 It's possible to apply different XML/SQL for each databases by creating multiple files such as `gitbucket_1.0.0_h2.sql` (for H2 database) and `gitbucket_1.0.0_mysql.sql` (for MySQL).
+
+## for Developers
+
+To release arifacts, run the following command:
+
+```
+$ mvn deploy -DperformRelease=true -DskipTests
+```
