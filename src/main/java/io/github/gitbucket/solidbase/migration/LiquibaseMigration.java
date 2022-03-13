@@ -3,6 +3,8 @@ package io.github.gitbucket.solidbase.migration;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.text.SimpleDateFormat;
@@ -18,6 +20,7 @@ import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import liquibase.resource.ClassLoaderResourceAccessor;
+import liquibase.resource.InputStreamList;
 import liquibase.sql.Sql;
 import liquibase.sqlgenerator.SqlGeneratorFactory;
 import liquibase.statement.SqlStatement;
@@ -97,24 +100,31 @@ public class LiquibaseMigration implements Migration {
     }
 
     private static class StringResourceAccessor extends ClassLoaderResourceAccessor {
-
         private String fileName;
         private String source;
+        private ClassLoader classLoader;
 
         public StringResourceAccessor(String fileName, String source, ClassLoader classLoader){
             super(classLoader);
             this.fileName = fileName;
             this.source = source;
+            this.classLoader = classLoader;
         }
 
         @Override
-        public Set<InputStream> getResourcesAsStream(String path) throws IOException {
-            if(path.equals(fileName)){
-                Set<InputStream> set = new HashSet<>();
-                set.add(new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8)));
-                return set;
+        public InputStreamList openStreams(String relativeTo, String streamPath) throws IOException {
+            streamPath = this.getFinalPath(relativeTo, streamPath);
+            if(streamPath.equals(fileName)){
+                InputStreamList returnList = new InputStreamList();
+                try {
+                    URI uri = classLoader.getResources(streamPath).nextElement().toURI();
+                    returnList.add(uri, new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8)));
+                } catch (URISyntaxException e) {
+                    throw new RuntimeException(e);
+                }
+                return returnList;
             } else {
-                return super.getResourcesAsStream(path);
+                return super.openStreams(relativeTo, streamPath);
             }
         }
     }
