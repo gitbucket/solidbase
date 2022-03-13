@@ -6,7 +6,7 @@
 
   <groupId>io.github.gitbucket</groupId>
   <artifactId>solidbase</artifactId>
-  <version>1.0.4-SNAPSHOT</version>
+  <version>1.0.4</version>
 
   <packaging>jar</packaging>
   <name>solidbase</name>

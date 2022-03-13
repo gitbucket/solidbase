@@ -17,13 +17,13 @@ Add following dependency into your Maven `pom.xml`:
   <dependency>
     <groupId>io.github.gitbucket</groupId>
     <artifactId>solidbase</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </dependency>
 </dependencies>
 ```
 or for Gradle add to `build.gradle`:
 ```groovy
-implementation 'io.github.gitbucket:solidbase:1.0.3'
+implementation 'io.github.gitbucket:solidbase:1.0.4'
 ```
 ### Define migration
 
