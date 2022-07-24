@@ -22,7 +22,6 @@ public class JDBCVersionManager implements VersionManager {
     public void initialize() throws Exception {
         if(!checkTableExist()){
             updateDatabase(conn, "CREATE TABLE VERSIONS (MODULE_ID VARCHAR(100) NOT NULL PRIMARY KEY, VERSION VARCHAR(100) NOT NULL)");
-            //updateDatabase(conn, "ALTER TABLE VERSIONS ADD CONSTRAINT VERSIONS_PK PRIMARY KEY (MODULE_ID)");
         }
     }
 
