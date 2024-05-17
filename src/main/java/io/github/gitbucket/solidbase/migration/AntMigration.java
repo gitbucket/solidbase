@@ -5,13 +5,14 @@ import static io.github.gitbucket.solidbase.migration.MigrationUtils.*;
 import org.apache.tools.ant.Project;
 import org.apache.tools.ant.ProjectHelper;
 
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
 
 public class AntMigration implements Migration {
 
-    private String path;
+    private final String path;
 
     public AntMigration(){
         this(null);
@@ -33,7 +34,7 @@ public class AntMigration implements Migration {
         try {
             ClassLoader classLoader = (ClassLoader) context.get(Solidbase.CLASSLOADER);
             String source = MigrationUtils.readResourceAsString(classLoader, path);
-            Files.write(tempFilePath, source.getBytes("UTF-8"));
+            Files.write(tempFilePath, source.getBytes(StandardCharsets.UTF_8));
 
             Project project = new Project();
             project.setProperty("ant.file", path);

@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Module {
 
-    private String moduleId;
-    private List<Version> versions = new ArrayList<>();
+    private final String moduleId;
+    private final List<Version> versions = new ArrayList<>();
 
     public Module(String moduleId){
         this.moduleId = moduleId;

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <changeSet>
     <createTable tableName="person">
         <column name="id" type="int" autoIncrement="true" primaryKey="true" nullable="false"/>

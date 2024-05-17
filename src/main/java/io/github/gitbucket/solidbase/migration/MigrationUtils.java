@@ -14,59 +14,34 @@ import java.sql.SQLException;
 public class MigrationUtils {
 
     public static int updateDatabase(Connection conn, String sql, Object... params) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        try {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             setParameters(stmt, params);
             return stmt.executeUpdate();
-        } finally {
-            if(stmt != null){
-                stmt.close();
-            }
         }
     }
 
     public static Integer selectIntFromDatabase(Connection conn, String sql, Object... params) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        try {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             setParameters(stmt, params);
-            ResultSet rs = stmt.executeQuery();
-            try {
-                if(rs.next()){
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
                     return rs.getInt(1);
                 } else {
                     return null;
                 }
-            } finally {
-                if(rs != null){
-                    rs.close();
-                }
-            }
-        } finally {
-            if(stmt != null){
-                stmt.close();
             }
         }
     }
 
     public static String selectStringFromDatabase(Connection conn, String sql, Object... params) throws SQLException {
-        PreparedStatement stmt = conn.prepareStatement(sql);
-        try {
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             setParameters(stmt, params);
-            ResultSet rs = stmt.executeQuery();
-            try {
-                if(rs.next()){
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
                     return rs.getString(1);
                 } else {
                     return null;
                 }
-            } finally {
-                if(rs != null){
-                    rs.close();
-                }
-            }
-        } finally {
-            if(stmt != null){
-                stmt.close();
             }
         }
     }
@@ -95,11 +70,9 @@ public class MigrationUtils {
             while((length = in.read(buf)) != -1){
                 out.write(buf, 0, length);
             }
-            return new String(out.toByteArray(), "UTF-8");
+            return out.toString("UTF-8");
         } finally {
-            if(in != null){
-                in.close();
-            }
+            in.close();
         }
     }
 

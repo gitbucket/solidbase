@@ -7,8 +7,8 @@ import java.util.List;
 
 public class Version {
 
-    private String version;
-    private List<Migration> migrations = new ArrayList<>();
+    private final String version;
+    private final List<Migration> migrations = new ArrayList<>();
 
     public Version(String version){
         this.version = version;
