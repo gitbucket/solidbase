@@ -17,7 +17,7 @@ Add following dependency into your Maven `pom.xml`:
   <dependency>
     <groupId>io.github.gitbucket</groupId>
     <artifactId>solidbase</artifactId>
-    <version>1.0.5</version>
+    <version>1.1.0</version>
   </dependency>
 </dependencies>
 ```
@@ -34,10 +34,10 @@ Create the Liquibase migration xml files under `src/main/resources`. For example
   ```xml
   <changeSet>
     <createTable tableName="person">
-        <column name="id" type="int" autoIncrement="true" primaryKey="true" nullable="false"/>
-        <column name="firstname" type="varchar(50)"/>
-        <column name="lastname" type="varchar(50)" constraints nullable="false"/>
-        <column name="state" type="char(2)"/>
+      <column name="id" type="int" autoIncrement="true" primaryKey="true" nullable="false"/>
+      <column name="firstname" type="varchar(50)"/>
+      <column name="lastname" type="varchar(50)" nullable="false"/>
+      <column name="state" type="char(2)"/>
     </createTable>
   </changeSet>
   ```
@@ -104,10 +104,10 @@ Differences between the current version and the latest version are applied.
 
 Solidbase creates a following `VERSIONS` table to manage versions automatically:
 
-Column name    | Data type    | Not Null
-:--------------|:-------------|:---------
-MODULE_ID (PK) | VARCHAR(100) | Yes
-VERSION        | VARCHAR(100) | Yes
+| Column name    | Data type    | Not Null |
+|:---------------|:-------------|:---------|
+| MODULE_ID (PK) | VARCHAR(100) | Yes      |
+| VERSION        | VARCHAR(100) | Yes      |
 
 Solidbase uses this table to know the current version. When migration of the new version is successful, it updates the version with the new version.
 

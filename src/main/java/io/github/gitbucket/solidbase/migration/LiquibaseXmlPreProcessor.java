@@ -13,6 +13,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -75,7 +76,7 @@ public class LiquibaseXmlPreProcessor implements LiquibasePreProcessor {
 
     private static Document parseXml(String xml) throws Exception {
         DocumentBuilder builder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
-        Document doc = builder.parse(new ByteArrayInputStream(xml.getBytes("UTF-8")));
+        Document doc = builder.parse(new ByteArrayInputStream(xml.getBytes(StandardCharsets.UTF_8)));
         return doc;
     }
 
@@ -88,6 +89,6 @@ public class LiquibaseXmlPreProcessor implements LiquibasePreProcessor {
         transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
         transformer.transform(new DOMSource(doc), new StreamResult(out));
 
-        return new String(out.toByteArray(), "UTF-8");
+        return out.toString("UTF-8");
     }
 }

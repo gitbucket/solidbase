@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project default="test">
   <target name="test">
     <mkdir dir="solidbase-test-dir"/>

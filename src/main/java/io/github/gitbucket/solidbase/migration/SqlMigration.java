@@ -15,7 +15,7 @@ import java.util.Map;
  */
 public class SqlMigration implements Migration {
 
-    private String path;
+    private final String path;
 
     /**
      * Creates <code>SqlMigration</code> that migrates using <code>/$MODULE_ID_$VERSION.sql</code> on the classpath.

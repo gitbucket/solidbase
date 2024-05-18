@@ -1,6 +1,7 @@
 package io.github.gitbucket.solidbase.migration;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
@@ -19,8 +20,9 @@ import liquibase.changelog.ChangeLogParameters;
 import liquibase.changelog.ChangeSet;
 import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
+import liquibase.resource.AbstractResource;
 import liquibase.resource.ClassLoaderResourceAccessor;
-import liquibase.resource.InputStreamList;
+import liquibase.resource.Resource;
 import liquibase.sql.Sql;
 import liquibase.sqlgenerator.SqlGeneratorFactory;
 import liquibase.statement.SqlStatement;
@@ -30,7 +32,7 @@ import liquibase.statement.SqlStatement;
  */
 public class LiquibaseMigration implements Migration {
 
-    private String path;
+    private final String path;
 
     /**
      * Creates <code>LiquibaseMigration</code> that migrates using <code>/$MODULE_ID_$VERSION.xml</code> on the classpath.
@@ -100,9 +102,9 @@ public class LiquibaseMigration implements Migration {
     }
 
     private static class StringResourceAccessor extends ClassLoaderResourceAccessor {
-        private String fileName;
-        private String source;
-        private ClassLoader classLoader;
+        private final String fileName;
+        private final String source;
+        private final ClassLoader classLoader;
 
         public StringResourceAccessor(String fileName, String source, ClassLoader classLoader){
             super(classLoader);
@@ -112,20 +114,48 @@ public class LiquibaseMigration implements Migration {
         }
 
         @Override
-        public InputStreamList openStreams(String relativeTo, String streamPath) throws IOException {
-            streamPath = this.getFinalPath(relativeTo, streamPath);
-            if(streamPath.equals(fileName)){
-                InputStreamList returnList = new InputStreamList();
+        public List<Resource> getAll(String path) throws IOException {
+            if(path.equals(fileName)){
+                List<Resource> returnList = new ArrayList<>();
                 try {
-                    URI uri = classLoader.getResources(streamPath).nextElement().toURI();
-                    returnList.add(uri, new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8)));
+                    URI uri = classLoader.getResources(path).nextElement().toURI();
+                    returnList.add(new ByteArrayResource(source, path, uri));
                 } catch (URISyntaxException e) {
                     throw new RuntimeException(e);
                 }
                 return returnList;
             } else {
-                return super.openStreams(relativeTo, streamPath);
+                throw new FileNotFoundException(path);
             }
+        }
+    }
+
+    private static class ByteArrayResource extends AbstractResource {
+        private final String source;
+
+        public ByteArrayResource(String source, String path, URI uri) {
+            super(path, uri);
+            this.source = source;
+        }
+
+        @Override
+        public InputStream openInputStream() throws IOException {
+            return new ByteArrayInputStream(source.getBytes(StandardCharsets.UTF_8));
+        }
+
+        @Override
+        public boolean exists() {
+            return true;
+        }
+
+        @Override
+        public Resource resolve(String other) {
+            return null;
+        }
+
+        @Override
+        public Resource resolveSibling(String other) {
+            return null;
         }
     }
 

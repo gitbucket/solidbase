@@ -11,7 +11,7 @@ import java.sql.ResultSet;
  */
 public class JDBCVersionManager implements VersionManager {
 
-    private Connection conn;
+    private final Connection conn;
 
     public JDBCVersionManager(Connection conn){
         this.conn = conn;
