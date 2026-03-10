@@ -1,4 +1,4 @@
-# Solidbase [![build](https://github.com/gitbucket/solidbase/workflows/build/badge.svg?branch=master)](https://github.com/gitbucket/solidbase/actions?query=workflow%3Abuild+branch%3Amaster) [![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.github.gitbucket/solidbase/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.github.gitbucket/solidbase) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/gitbucket/solidbase/blob/master/LICENSE)
+# Solidbase [![build](https://github.com/gitbucket/solidbase/actions/workflows/build.yml/badge.svg?event=push)](https://github.com/gitbucket/solidbase/actions/workflows/build.yml) [![Maven Central](https://img.shields.io/maven-central/v/io.github.gitbucket/solidbase)](https://central.sonatype.com/artifact/io.github.gitbucket/solidbase) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://github.com/gitbucket/solidbase/blob/master/LICENSE)
 
 Generic migration tool for RDBMS and other resources based on [Liquibase](http://www.liquibase.org/).
 
