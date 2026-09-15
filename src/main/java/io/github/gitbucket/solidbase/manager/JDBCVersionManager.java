@@ -5,6 +5,7 @@ import static io.github.gitbucket.solidbase.migration.MigrationUtils.*;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.util.Optional;
 
 /**
  * Created by takezoe on 15/11/23.
@@ -35,6 +36,15 @@ public class JDBCVersionManager implements VersionManager {
     @Override
     public String getCurrentVersion(String moduleId) throws Exception {
         return selectStringFromDatabase(conn, "SELECT VERSION FROM VERSIONS WHERE MODULE_ID = ?", moduleId);
+    }
+
+    @Override
+    public Optional<String> findCurrentVersion(String moduleId) throws Exception {
+        if (!checkTableExist()) {
+            return Optional.empty();
+        } else {
+            return Optional.ofNullable(getCurrentVersion(moduleId));
+        }
     }
 
     protected boolean checkTableExist(){
